@@ -1,0 +1,3 @@
+.reveal pre[data-auto-animate-target] code {
+    overflow: hidden;
+}

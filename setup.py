@@ -8,7 +8,7 @@ setup(
     version='0.1.0',
     py_modules=[],
     url='https://www.github.com/Theta-Dev/sphinx-revealit',
-    license='MIT',
+    license='Apache-2.0',
     author='ThetaDev',
     description='Sphinx extension with theme to generate Reveal.js presentation',
     long_description=readme_text,
