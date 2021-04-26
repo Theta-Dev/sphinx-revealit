@@ -1,17 +1,7 @@
-sphinx-revealjs
+sphinx-revealit
 ===============
 
-.. image:: https://img.shields.io/pypi/v/sphinx-revealjs.svg
-    :target: https://pypi.org/project/sphinx-revealjs/
-
-.. image:: https://github.com/attakei/sphinx-revealjs/workflows/Testings/badge.svg
-    :target: https://github.com/attakei/sphinx-revealjs/actions
-
-.. image:: https://travis-ci.org/attakei/sphinx-revealjs.svg?branch=master
-    :target: https://travis-ci.org/attakei/sphinx-revealjs
-
-
-Sphinx extension with theme to generate Reveal.js presentation
+Sphinx extension with theme to generate Reveal.js presentations.
 
 Overview
 --------

@@ -28,21 +28,21 @@ class SectionTagRenderer(object):
         return " ".join(pair)
 
 
-class revealjs_section(
-    SectionTagRenderer, nodes.Structural, nodes.Element
-):  # noqa: D101,E501
+class RevealjsNode(nodes.Structural, nodes.Element):
     pass
 
 
-class revealjs_break(
-    SectionTagRenderer, nodes.Structural, nodes.Element
-):  # noqa: D101,E501
+class revealjs_deck(RevealjsNode):
     pass
 
 
-class revealjs_slide(nodes.Structural, nodes.Element):  # noqa: D101
+class revealjs_section(SectionTagRenderer, RevealjsNode):
     pass
 
 
-class revealjs_fragments(nodes.Structural, nodes.Element):  # noqa: D101
+class revealjs_break(SectionTagRenderer, RevealjsNode):
+    pass
+
+
+class revealjs_fragments(RevealjsNode):
     pass

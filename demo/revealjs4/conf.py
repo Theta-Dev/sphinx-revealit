@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 # -- Path setup --------------------------------------------------------------
-import os
 
 # -- Project information -----------------------------------------------------
 project = "sphinx-revealjs"
@@ -11,7 +10,7 @@ version = ""
 release = "2018.10"
 
 # -- General configuration ---------------------------------------------------
-extensions = ["sphinx_revealjs", "sphinxcontrib.gtagjs"]
+extensions = ["sphinx_revealit"]
 templates_path = ["_templates"]
 source_suffix = ".rst"
 master_doc = "index"
@@ -28,30 +27,32 @@ html_static_path = ["_static"]
 
 # -- Options for Reveal.js output ---------------------------------------------
 revealjs_static_path = ["_static"]
-revealjs_google_fonts = ["M PLUS 1p",]
+revealjs_google_fonts = ["M PLUS 1p"]
 revealjs_style_theme = "black"
-revealjs_script_conf = """
-    {
-        controls: true,
-        progress: true,
-        history: true,
-        center: true,
-        transition: "slide",
-    }
-"""
+revealjs_script_conf = {
+    'controls': True,
+    'progress': True,
+    'history': True,
+    'center': False,
+    'transition': "slide",
+    'autoPlayMedia': True,
+
+    'width': 1920,
+    'height': 1080,
+    'margin': 0.04,
+}
+
 revealjs_script_plugins = [
-    {
-        "name": "RevealNotes",
-        "src": "revealjs4/plugin/notes/notes.js",
-    },
     {
         "name": "RevealHighlight",
         "src": "revealjs4/plugin/highlight/highlight.js",
     },
 ]
 revealjs_css_files = [
-    "revealjs4/plugin/highlight/zenburn.css",
+    "revealjs4/plugin/highlight/monokai.css",
 ]
+
+"""
 
 # -- Options for HTMLHelp output ---------------------------------------------
 htmlhelp_basename = "sphinx-revealjsdoc"
@@ -89,7 +90,4 @@ texinfo_documents = [
 # -- Options for Epub output -------------------------------------------------
 epub_title = project
 epub_exclude_files = ["search.html"]
-
-# -- Options for extensions --------------------------------------------------
-if "GTAGJS_IDS" in os.environ:
-    gtagjs_ids = os.environ["GTAGJS_IDS"].split(",")
+"""

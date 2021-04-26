@@ -1,7 +1,7 @@
 """Contexts for passing between objects."""
 from typing import List
 
-from .utils import static_resource_uri
+from .utils import static_resource_uri, to_json
 
 
 class RevealjsEngine:
@@ -74,11 +74,11 @@ class RevealjsProjectContext(object):
         self,
         engine_version: int,
         script_files: List[str] = None,
-        script_conf: str = None,
+        script_conf: dict = None,
         script_plugins: List[RevealjsPlugin] = None,
     ):  # noqa
         self.engine = RevealjsEngine.from_version(engine_version)
-        self.script_conf = script_conf
+        self.script_conf = to_json(script_conf)
         self.script_plugins = script_plugins or []
         self._script_files = script_files or []
 
