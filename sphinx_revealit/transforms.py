@@ -23,7 +23,7 @@ class RevealjsIdAttribute(Transform):
             for index in range(parent.index(child) + 1, len(parent)):
                 element = parent[index]
                 if element.__class__ in RevealjsIdAttribute.applicable_nodes:
-                    element['revealjs-id'] = pending.details['revealjs-id']
+                    element.attributes['revealjs-id'] = pending.details['revealjs-id']
                     pending.parent.remove(pending)
                     return
             else:

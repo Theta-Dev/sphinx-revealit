@@ -11,18 +11,28 @@ from sphinx_revealit.directives import (
     RevealjsSection,
     RevealjsDeck,
     RevealjsId,
+    RevealjsEffect,
+    RevealjsEffects,
+    RevealjsCode,
+    RevealjsShape,
+    RevealjsTitle,
 )
 from sphinx_revealit.nodes import (
     revealjs_break,
     revealjs_fragments,
     revealjs_section,
     revealjs_deck,
+    revealjs_effect,
+    revealjs_shape,
+    revealjs_title,
 )
 from sphinx_revealit.themes import get_theme_path
 from sphinx_revealit.writers import (
-    depart_revealjs_break,
     not_write,
+    depart_revealjs_break,
     visit_revealjs_break,
+    visit_revealjs_element,
+    depart_revealjs_element,
 )
 
 
@@ -33,15 +43,22 @@ def setup(app: Sphinx):
         revealjs_section, html=(not_write, not_write), revealjs=(not_write, not_write)
     )
     app.add_node(
-        revealjs_break,
-        html=(not_write, not_write),
-        revealjs=(visit_revealjs_break, depart_revealjs_break),
+        revealjs_break, html=(not_write, not_write), revealjs=(visit_revealjs_break, depart_revealjs_break),
     )
     app.add_node(
         revealjs_deck, html=(not_write, not_write), revealjs=(not_write, not_write)
     )
     app.add_node(
-        revealjs_fragments, html=(not_write, not_write), revealjs=(not_write, not_write)
+        revealjs_fragments, html=(not_write, not_write), revealjs=(visit_revealjs_element, depart_revealjs_element)
+    )
+    app.add_node(
+        revealjs_effect, html=(not_write, not_write), revealjs=(visit_revealjs_element, depart_revealjs_element)
+    )
+    app.add_node(
+        revealjs_shape, html=(not_write, not_write), revealjs=(visit_revealjs_element, depart_revealjs_element)
+    )
+    app.add_node(
+        revealjs_title, html=(not_write, not_write), revealjs=(visit_revealjs_element, depart_revealjs_element)
     )
 
     app.add_directive('rjs-deck', RevealjsDeck)
@@ -49,12 +66,16 @@ def setup(app: Sphinx):
     app.add_directive('rjs-section', RevealjsSection)
     app.add_directive('rjs-fragments', RevealjsFragments)
     app.add_directive('rjs-id', RevealjsId)
+    app.add_directive('rjs-effect', RevealjsEffect)
+    app.add_directive('rjs-effects', RevealjsEffects)
+    app.add_directive('rjs-code', RevealjsCode)
+    app.add_directive('rjs-shape', RevealjsShape)
+    app.add_directive('rjs-title', RevealjsTitle)
 
     app.add_config_value('revealjs_use_section_ids', False, True)
     app.add_config_value('revealjs_static_path', [], True)
     app.add_config_value('revealjs_style_theme', 'black', True)
     app.add_config_value('revealjs_css_files', [], True)
-    # app.add_config_value('revealjs_generic_font', 'sans-serif', True)
     app.add_config_value('revealjs_script_files', [], True)
     app.add_config_value('revealjs_script_conf', None, True)
     app.add_config_value('revealjs_script_plugins', [], True)

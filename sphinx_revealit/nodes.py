@@ -47,3 +47,15 @@ class revealjs_break(SectionTagRenderer, RevealjsNode):
 
 class revealjs_fragments(RevealjsNode):
     pass
+
+
+class revealjs_effect(RevealjsNode):
+    pass
+
+
+class revealjs_shape(RevealjsNode):
+    pass
+
+
+class revealjs_title(RevealjsNode):
+    pass

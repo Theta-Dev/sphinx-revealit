@@ -5,6 +5,12 @@ sphinx-revealit
 .. rjs-deck::
   :stylesheet: _static/style.css
 
+.. rjs-title:: 4
+  Create awesome presentations using Sphinx
+
+``sphinx-revealit`` is an extenstion for the Sphinx documentation generator
+that allows you to build HTML-based presentations using the RevealJS library.
+
 First slide
 ===========
 
@@ -13,11 +19,18 @@ First slide
 
 Hello World, this is me, ThetaDev
 
-.. rjs-fragments::
+.. rjs-fragments:: fade-right
 
   - want to be a software developer
   - doing web projects in my free time
   - likes arduino
+
+.. rjs-fragments:: fade-right
+  :stack:
+
+  .. image:: /img/icon-attakei.jpg
+
+  .. image:: /img/cat.jpeg
   
 Second slide
 ============
@@ -29,6 +42,7 @@ Second slide
 
 .. code-block:: python
   :linenos:
+  :emphasize-lines: 1
   
   def hello_world():
     print('Hello World')
@@ -42,11 +56,10 @@ Second slide
 .. rjs-section::
   :auto-animate:
 
-.. rjs-id:: code1
-
-.. code-block:: python
+.. rjs-code:: python
   :linenos:
-  :emphasize-lines: 2-3,0,6
+  :emphasize-lines: 2-3|6|1,5
+  :data-id: code1
   
   def hello_world():
     print('Hello World')
@@ -98,3 +111,48 @@ Fourth#2 slide
 
 .. rjs-section::
   :background-image: /img/dir1/cat.jpeg
+
+
+Animation time
+==============
+
+.. rjs-effect::
+  :data-id: abc
+  :index: 0
+
+  First animation
+
+.. rjs-effects::
+  1.fade-in
+  2.highlight-red
+  4.strike
+  6.fade-out
+
+  Hello World
+
+.. rjs-effects::
+  1.fade-in
+  3.highlight-red
+  4.strike
+  5.fade-out
+
+  This is me
+
+
+YT video
+========
+
+.. rjs-section::
+  :background-iframe: https://www.youtube.com/embed/XaqR3G_NVoo
+  :background-size: contain
+  :notitle:
+
+
+Shapes
+======
+
+Let's test some shapes:
+
+.. rjs-shape:: box
+
+  Text in shape

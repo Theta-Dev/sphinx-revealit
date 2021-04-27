@@ -4,7 +4,7 @@ from docutils.nodes import Node
 from sphinx.writers.html5 import HTML5Translator
 
 from sphinx_revealit.elements import RjsElementSection
-from .nodes import revealjs_break
+from sphinx_revealit.nodes import RevealjsNode, revealjs_break
 
 
 def has_child_sections(node: nodes.Element, name: str):
@@ -108,17 +108,21 @@ class RevealjsSlideTranslator(HTML5Translator):
         attrs = [
             'data-trim',
             'data-noescape',
-            'data-line-numbers',  # TODO: make optional
         ]
 
         if node.attributes.get('revealjs-id'):
-            pre_attrs.append('data-id="%s"' % node.attributes['revealjs-id'][0])
+            pre_attrs.append('data-id="%s"' % node.attributes['revealjs-id'])
 
         if node['language']:
             attrs.append('class="%s"' % node['language'])
 
-        # if isinstance(node.parent, revealjs_item) and node.parent.id:
-        #     attrs.append('data-id='%s'' % node.parent.id)
+        if node.attributes.get('revealjs-hl-lines'):
+            attrs.append('data-line-numbers="%s"' % node.attributes['revealjs-hl-lines'])
+        elif node.attributes.get('highlight_args') and node.attributes['highlight_args'].get('hl_lines'):
+            hl_lines = ','.join([str(x) for x in node.attributes['highlight_args']['hl_lines']])
+            attrs.append('data-line-numbers="%s"' % hl_lines)
+        elif node.attributes.get('linenos'):
+            attrs.append('data-line-numbers')
 
         self.body.append('<pre %s><code %s>\n' % (' '.join(pre_attrs), ' '.join(attrs)))
 
@@ -131,7 +135,7 @@ class RevealjsSlideTranslator(HTML5Translator):
 
     def visit_paragraph(self, node: nodes.paragraph):
         if node.attributes.get('revealjs-id'):
-            self.body.append('<p data-id="%s">' % node.attributes['revealjs-id'][0])
+            self.body.append('<p data-id="%s">' % node.attributes['revealjs-id'])
         else:
             super(RevealjsSlideTranslator, self).visit_paragraph(node)
 
@@ -161,3 +165,13 @@ def depart_revealjs_break(self, node: revealjs_break):
         self.body.append(title.children[0])
         self.body.append(f'</h{self.section_level}>')
         self.body.append('\n')
+
+
+def visit_revealjs_element(self, node: RevealjsNode):
+    elm = node.revealit_el
+    self.body.append(elm.get_opening_tag(node, self.builder.imgpath, self.builder.images))
+
+
+def depart_revealjs_element(self, node: RevealjsNode):
+    elm = node.revealit_el
+    self.body.append(elm.get_closing_tag())

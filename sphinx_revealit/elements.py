@@ -60,9 +60,17 @@ class OptionFlag(Option):
         return Attr()
 
 
-class OptionClass(Option):
+class OptionClass(OptionFlag):
     def apply(self, elm: 'RjsElement', val):
         elm.add_cls(self.attr_name)
+
+
+class OptionCClass(Option):
+    def __init__(self):
+        super().__init__('')
+
+    def apply(self, elm: 'RjsElement', val):
+        elm.add_cls(val)
 
 
 class OptionImage(Option):
@@ -101,7 +109,7 @@ class RjsElement:
     arguments: List[Option] = []
     n_req_arguments = 0
 
-    def __init__(self, directive: Directive = None):
+    def __init__(self, arguments: list = None, options: dict = None):
         self.attrs = {}
         self.classes = []
         self.cdata = {}
@@ -109,15 +117,18 @@ class RjsElement:
         # Image URI -> Actual path (gets populated by collector)
         self.images = {}
 
-        if directive:
-            if directive.arguments:
-                for val, i in enumerate(directive.arguments[0:len(self.arguments)]):
-                    self.arguments[i].apply(self, val)
+        if arguments:
+            for i, val in enumerate(arguments[0:len(self.arguments)]):
+                self.arguments[i].apply(self, val)
 
-            if directive.options:
-                for key, val in directive.options.items():
-                    if key in self.options:
-                        self.options[key].apply(self, val)
+        if options:
+            for key, val in options.items():
+                if key in self.options:
+                    self.options[key].apply(self, val)
+
+    @classmethod
+    def from_directive(cls, directive: Directive):
+        return cls(directive.arguments, directive.options)
 
     @classmethod
     def option_spec(cls):
@@ -161,6 +172,8 @@ class RjsElement:
             for key, val in attrs.items():
                 if isinstance(val, Attr):
                     attr_strs.append(key + val.out(self, env_imgpath, env_images))
+                elif val:
+                    attr_strs.append('%s="%s"' % (key, str(val)))
 
             return '<%s %s>\n' % (self.tag, ' '.join(attr_strs))
         else:
@@ -178,9 +191,9 @@ class RjsElementSection(RjsElement):
         'background-position': Option('data-background-position'),
         'background-repeat': Option('data-background-repeat'),
         'background-size': Option('data-background-size'),
-        'background-video': Option('data-background-video'),
-        'background-video-loop': Option('data-background-video-loop'),
-        'background-video-muted': Option('data-background-video-muted'),
+        'background-video': OptionImage('data-background-video'),
+        'background-video-loop': OptionFlag('data-background-video-loop'),
+        'background-video-muted': OptionFlag('data-background-video-muted'),
         'background-opacity': Option('data-background-opacity'),
         'background-iframe': Option('data-background-iframe'),
         'background-interactive': Option('data-background-interactive'),
@@ -203,3 +216,73 @@ class RjsElementDeck(RjsElement):
         'conf': OptionCDataJSON('conf'),
         'stylesheet': OptionCData('stylesheet'),
     }
+
+
+class RjsElementEffect(RjsElement):
+    tag = 'div'
+    arguments = [OptionCClass()]
+    options = {
+        'data-id': Option('data-id'),
+        'index': Option('data-fragment-index'),
+    }
+
+    def __init__(self, arguments: list = None, options: dict = None):
+        super().__init__(arguments, options)
+        self.add_cls('fragment')
+
+
+class RjsElementFragments(RjsElement):
+    tag = 'div'
+    arguments = [OptionCData('animation')]
+    options = {
+        'stack': OptionClass('r-stack')
+    }
+
+
+class RjsElementBox(RjsElement):
+    tag = 'div'
+    arguments = [OptionCClass()]
+    options = {
+        'data-id': Option('data-id'),
+        'style': Option('style'),
+    }
+
+
+class RjsElementTitle(RjsElement):
+    tag = 'h'
+    options = {
+        'data-id': Option('data-id'),
+        'class': OptionCClass(),
+        'style': Option('style'),
+    }
+
+    def __init__(self, arguments: list = None, options: dict = None):
+        super().__init__(arguments, options)
+
+        if not arguments:
+            return
+
+        raw_args = arguments[0]
+        args_split = [a.strip() for a in str(raw_args).split('\n', 2)]
+
+        level = 3
+        self.content = ''
+
+        if len(args_split) == 1:
+            self.content = args_split[0]
+        elif len(args_split) == 2:
+            try:
+                level = int(args_split[0])
+                assert level > 0
+                assert level <= 6
+            except ValueError:
+                logger.error('RevealJS title level must be a number')
+            except AssertionError:
+                logger.error('RevealJS title level not between 1 and 6')
+
+            self.content = args_split[1]
+
+        self.tag = 'h%s' % str(level)
+
+    def get_closing_tag(self):
+        return '%s\n%s' % (self.content, super().get_closing_tag())
