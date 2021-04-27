@@ -21,19 +21,19 @@ Usage
 1. Create your sphinx documentation
 2. Edit `conf.py` to use this extension
 
-    .. code-block:: python
+.. code-block:: python
 
-        extensions = [
-            'sphinx_revealit',
-        ]
+  extensions = [
+    'sphinx_revealit',
+  ]
 
 3. Write source for standard document style
 
 4. Build sources as Reveal.js presentation
 
-    .. code-block:: bash
+.. code-block:: bash
 
-        $ make revealjs
+  $ make revealjs
 
 Contributings
 -------------

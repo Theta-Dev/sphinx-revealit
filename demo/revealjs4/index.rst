@@ -3,14 +3,13 @@ sphinx-revealit
 ===============
 
 .. rjs-deck::
-    :theme: moon
+  :stylesheet: _static/style.css
 
 First slide
 ===========
 
 .. rjs-section::
   :background-color: #009900
-  :notitle:
 
 Hello World, this is me, ThetaDev
 
@@ -64,6 +63,9 @@ Unmatched paragraph
 Third slide
 ===========
 
+.. rjs-section::
+  :notitle:
+
 Grid table:
 
 +------------+------------+-----------+
@@ -73,6 +75,10 @@ Grid table:
 +------------+------------+-----------+
 | body row 2 | Cells may span columns.|
 +------------+------------+-----------+
+
+Jujubes pie chocolate brownie cake powder dragée gummies dragée. Jelly jujubes liquorice halvah gummies. Danish dessert donut. Jelly beans toffee ice cream muffin jujubes croissant cheesecake oat cake. Brownie lemon drops tootsie roll pie lollipop chocolate pie candy dragée. Fruitcake topping gummies jelly-o marzipan gingerbread. Ice cream liquorice cake gummi bears bear claw. Lemon drops chocolate cupcake sesame snaps ice cream chocolate bar. Chocolate oat cake donut fruitcake chocolate bar lemon drops muffin. Danish pastry chocolate liquorice macaroon macaroon donut toffee dessert. Gummies jelly jujubes topping carrot cake lemon drops muffin danish bear claw. Bear claw macaroon sugar plum bonbon chocolate cake cake chocolate candy canes lemon drops.
+
+.. rjs-break::
 
 Jujubes pie chocolate brownie cake powder dragée gummies dragée. Jelly jujubes liquorice halvah gummies. Danish dessert donut. Jelly beans toffee ice cream muffin jujubes croissant cheesecake oat cake. Brownie lemon drops tootsie roll pie lollipop chocolate pie candy dragée. Fruitcake topping gummies jelly-o marzipan gingerbread. Ice cream liquorice cake gummi bears bear claw. Lemon drops chocolate cupcake sesame snaps ice cream chocolate bar. Chocolate oat cake donut fruitcake chocolate bar lemon drops muffin. Danish pastry chocolate liquorice macaroon macaroon donut toffee dessert. Gummies jelly jujubes topping carrot cake lemon drops muffin danish bear claw. Bear claw macaroon sugar plum bonbon chocolate cake cake chocolate candy canes lemon drops.
 

@@ -9,7 +9,6 @@ from sphinx.environment.collectors import EnvironmentCollector
 from sphinx.locale import __
 from sphinx.util import logging
 
-from sphinx_revealit.elements import OptionImage
 from sphinx_revealit.nodes import RevealjsNode
 
 logger = logging.getLogger(__name__)
@@ -25,27 +24,27 @@ class RevealjsImageCollector(EnvironmentCollector):
 
     def process_doc(self, app: Sphinx, doctree: nodes.document) -> None:
         docname = app.env.docname
+        static_paths = app.builder.config['html_static_path']
 
         for node in doctree.traverse(RevealjsNode):
             elm = getattr(node, 'revealit_el', None)
 
             if elm:
-                for key, val in elm.data.items():
-                    if isinstance(elm.options.get(key), OptionImage):
-                        uri = directives.uri(val)
+                for img_uri in elm.get_image_uris():
+                    uri = directives.uri(img_uri)
 
-                        if uri.find('://') != -1 or uri.startswith('_static'):
-                            continue
-                        # Update imgpath to a relative path from srcdir
-                        # from a relative path from current document.
+                    if uri.find('://') != -1 or any(uri.startswith(p) for p in static_paths):
+                        continue
+                    # Update imgpath to a relative path from srcdir
+                    # from a relative path from current document.
 
-                        imgpath, _ = app.env.relfn2path(uri, docname)
+                    imgpath, _ = app.env.relfn2path(uri, docname)
 
-                        app.env.dependencies[docname].add(imgpath)
-                        if not os.access(os.path.join(app.srcdir, imgpath), os.R_OK):
-                            logger.warning(__('image file not readable: %s') % imgpath, type='image',
-                                           location=node, subtype='not_readable')
-                            continue
-                        app.env.images.add_file(docname, imgpath)
+                    app.env.dependencies[docname].add(imgpath)
+                    if not os.access(os.path.join(app.srcdir, imgpath), os.R_OK):
+                        logger.warning(__('image file not readable: %s') % imgpath, type='image',
+                                       location=node, subtype='not_readable')
+                        continue
+                    app.env.images.add_file(docname, imgpath)
 
-                        elm.images[val] = imgpath
+                    elm.images[img_uri] = imgpath

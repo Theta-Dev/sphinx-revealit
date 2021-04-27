@@ -41,15 +41,14 @@ class RevealjsSlideTranslator(HTML5Translator):
         - When enter next section, nest level.
         """
         self.section_level += 1
-        meta = find_child_section(node, "revealjs_section")
+        meta = find_child_section(node, 'revealjs_section')
         if meta is not None:
             elm = meta.revealit_el
         else:
             elm = RjsElementSection()
-        node.classes = node.get('classes', []) + elm.get_classes()
 
-        # if node.attributes.get("ids") and self.config.revealjs_use_section_ids:
-        #     attrs += ' id="{}"'.format(node.attributes["ids"][-1])
+        # if node.attributes.get('ids') and self.config.revealjs_use_section_ids:
+        #     attrs += ' id='{}''.format(node.attributes['ids'][-1])
         if self.section_level == 1:
             self.builder.revealjs_deck = find_child_section(node, 'revealjs_deck')
             self._proc_first_on_section = True
@@ -59,9 +58,9 @@ class RevealjsSlideTranslator(HTML5Translator):
             self._proc_first_on_section = False
             self.body.append(elm.get_closing_tag())
 
-        if has_child_sections(node, "section"):
+        if has_child_sections(node, 'section'):
             self._proc_first_on_section = True
-            self.body.append("<section>\n")
+            self.body.append('<section>\n')
         self.body.append(elm.get_opening_tag(node, self.builder.imgpath, self.builder.images))
 
     def depart_section(self, node: nodes.section):
@@ -71,15 +70,14 @@ class RevealjsSlideTranslator(HTML5Translator):
         """
         self.section_level -= 1
         if self.section_level >= 1:
-            self.body.append("</section>\n")
+            self.body.append('</section>\n')
 
     def visit_title(self, node):
         if isinstance(node.parent, nodes.section):
             section_meta = find_child_section(node.parent, 'revealjs_section')
 
             if section_meta:
-                elm = section_meta.revealit_el
-                if elm.notitle:
+                if section_meta.revealit_el.cdata.get('notitle'):
                     self.body.append('<!--')
                     self.context.append('-->\n')
                     return
@@ -98,7 +96,7 @@ class RevealjsSlideTranslator(HTML5Translator):
 
         Close speaker note.
         """
-        self.body.append("</aside>\n")
+        self.body.append('</aside>\n')
 
     def visit_literal_block(self, node: nodes.literal_block):
         """Begin ``literal_block`` .
@@ -120,7 +118,7 @@ class RevealjsSlideTranslator(HTML5Translator):
             attrs.append('class="%s"' % node['language'])
 
         # if isinstance(node.parent, revealjs_item) and node.parent.id:
-        #     attrs.append('data-id="%s"' % node.parent.id)
+        #     attrs.append('data-id='%s'' % node.parent.id)
 
         self.body.append('<pre %s><code %s>\n' % (' '.join(pre_attrs), ' '.join(attrs)))
 
@@ -129,7 +127,7 @@ class RevealjsSlideTranslator(HTML5Translator):
 
         Override base method, and close begun tags.
         """
-        self.body.append("</code></pre>\n")
+        self.body.append('</code></pre>\n')
 
     def visit_paragraph(self, node: nodes.paragraph):
         if node.attributes.get('revealjs-id'):
@@ -139,13 +137,14 @@ class RevealjsSlideTranslator(HTML5Translator):
 
 
 def not_write(self, node):
-    """visit/depart function for declare "no write"."""
+    """visit/depart function for declare 'no write'."""
     pass
 
 
 def visit_revealjs_break(self, node: revealjs_break):
     """Close current section."""
-    self.body.append("</section>\n")
+    elm = node.revealit_el
+    self.body.append(elm.get_closing_tag())
 
 
 def depart_revealjs_break(self, node: revealjs_break):
@@ -155,10 +154,10 @@ def depart_revealjs_break(self, node: revealjs_break):
     render title from current original section.
     """
     attrs = node.attributes_str()
-    self.body.append(f"<section {attrs}>\n")
-    if "notitle" not in node.attributes:
-        title = find_child_section(node.parent, "title")
-        self.body.append(f"<h{self.section_level}>")
+    self.body.append(f'<section {attrs}>\n')
+    if 'notitle' not in node.attributes:
+        title = find_child_section(node.parent, 'title')
+        self.body.append(f'<h{self.section_level}>')
         self.body.append(title.children[0])
-        self.body.append(f"</h{self.section_level}>")
-        self.body.append("\n")
+        self.body.append(f'</h{self.section_level}>')
+        self.body.append('\n')

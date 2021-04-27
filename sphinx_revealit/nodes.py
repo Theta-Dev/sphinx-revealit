@@ -1,10 +1,11 @@
 """Custom docutils nodes for Reveal.js."""
 from docutils import nodes
 
+from sphinx_revealit.elements import RjsElement
+
 
 class FlagAttribute(object):
     """Flag options for docutils node."""
-
     pass
 
 
@@ -19,7 +20,7 @@ class SectionTagRenderer(object):
         """
         pair = []
         for k, v in self.attributes.items():
-            if not k.startswith("data-"):
+            if not k.startswith('data-'):
                 continue
             if isinstance(v, FlagAttribute):
                 pair.append(k)
@@ -29,7 +30,7 @@ class SectionTagRenderer(object):
 
 
 class RevealjsNode(nodes.Structural, nodes.Element):
-    pass
+    revealit_el: RjsElement = None
 
 
 class revealjs_deck(RevealjsNode):

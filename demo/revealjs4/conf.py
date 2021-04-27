@@ -27,7 +27,6 @@ html_static_path = ["_static"]
 
 # -- Options for Reveal.js output ---------------------------------------------
 revealjs_static_path = ["_static"]
-revealjs_google_fonts = ["M PLUS 1p"]
 revealjs_style_theme = "black"
 revealjs_script_conf = {
     'controls': True,
@@ -52,7 +51,9 @@ revealjs_css_files = [
     "revealjs4/plugin/highlight/monokai.css",
 ]
 
-"""
+revealjs_font_body = 'monospace'
+
+'''
 
 # -- Options for HTMLHelp output ---------------------------------------------
 htmlhelp_basename = "sphinx-revealjsdoc"
@@ -90,4 +91,4 @@ texinfo_documents = [
 # -- Options for Epub output -------------------------------------------------
 epub_title = project
 epub_exclude_files = ["search.html"]
-"""
+'''

@@ -1,7 +1,0 @@
-{
-  "private": true,
-  "name": "sphinx-revealit",
-  "dependencies": {
-    "reveal.js": "^4.1.0"
-  }
-}
