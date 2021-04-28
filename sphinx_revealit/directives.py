@@ -2,7 +2,7 @@ from typing import List
 
 from docutils import nodes
 from docutils.parsers.rst import Directive, directives
-from sphinx.directives.code import CodeBlock
+from sphinx.directives.code import CodeBlock, LiteralInclude
 from sphinx.util import logging
 
 from sphinx_revealit.elements import (
@@ -187,25 +187,51 @@ class RevealjsId(Directive):
         return node_list
 
 
+CODE_BLOCK_OPTIONS = {
+    'data-id': directives.unchanged,
+    'index': directives.unchanged,
+}
+
+
+def code_block_pre(self):
+    hl_lines = self.options.get('emphasize-lines')
+    if hl_lines:
+        self.options['emphasize-lines'] = hl_lines.replace('|', ',')
+    return hl_lines
+
+
+def code_block_post(self, nodes, hl_lines):
+    for option, attr in (('data-id', 'revealjs-id'), ('index', 'revealjs-index')):
+        val = self.options.get(option)
+        if val:
+            nodes[0].attributes[attr] = val
+
+    nodes[0].attributes['revealjs-hl-lines'] = hl_lines
+    return nodes
+
+
 class RevealjsCode(CodeBlock):
     option_spec = {
         **CodeBlock.option_spec,
-        'data-id': directives.unchanged
+        **CODE_BLOCK_OPTIONS,
     }
 
     def run(self) -> List[nodes.Node]:
-        hl_lines = self.options.get('emphasize-lines')
-        if hl_lines:
-            self.options['emphasize-lines'] = hl_lines.replace('|', ',')
-
+        hl_lines = code_block_pre(self)
         nodes = super().run()
+        return code_block_post(self, nodes, hl_lines)
 
-        d_id = self.options.get('data-id')
-        if d_id:
-            nodes[0].attributes['revealjs-id'] = d_id
-        nodes[0].attributes['revealjs-hl-lines'] = hl_lines
 
-        return nodes
+class RevealjsLiteralInclude(LiteralInclude):
+    option_spec = {
+        **LiteralInclude.option_spec,
+        **CODE_BLOCK_OPTIONS,
+    }
+
+    def run(self) -> List[nodes.Node]:
+        hl_lines = code_block_pre(self)
+        nodes = super().run()
+        return code_block_post(self, nodes, hl_lines)
 
 
 class RevealjsShape(Directive):

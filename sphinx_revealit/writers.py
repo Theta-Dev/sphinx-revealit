@@ -124,6 +124,9 @@ class RevealjsSlideTranslator(HTML5Translator):
         elif node.attributes.get('linenos'):
             attrs.append('data-line-numbers')
 
+        if node.attributes.get('revealjs-index'):
+            attrs.append('data-fragment-index="%s"' % node.attributes['revealjs-index'])
+
         self.body.append('<pre %s><code %s>\n' % (' '.join(pre_attrs), ' '.join(attrs)))
 
     def depart_literal_block(self, node: nodes.literal_block):

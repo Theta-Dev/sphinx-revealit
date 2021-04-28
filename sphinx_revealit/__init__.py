@@ -1,6 +1,6 @@
 """Root module for sphinx-revealjs."""
 
-__version__ = '0.1.0'
+__version__ = '0.1.1'
 
 from sphinx.application import Sphinx
 
@@ -14,6 +14,7 @@ from sphinx_revealit.directives import (
     RevealjsEffect,
     RevealjsEffects,
     RevealjsCode,
+    RevealjsLiteralInclude,
     RevealjsShape,
     RevealjsTitle,
 )
@@ -69,6 +70,7 @@ def setup(app: Sphinx):
     app.add_directive('rjs-effect', RevealjsEffect)
     app.add_directive('rjs-effects', RevealjsEffects)
     app.add_directive('rjs-code', RevealjsCode)
+    app.add_directive('rjs-literalinclude', RevealjsLiteralInclude)
     app.add_directive('rjs-shape', RevealjsShape)
     app.add_directive('rjs-title', RevealjsTitle)
 
