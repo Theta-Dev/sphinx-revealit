@@ -24,7 +24,7 @@ html_static_path = ["_static"]
 
 # -- Options for Reveal.js output ---------------------------------------------
 revealjs_static_path = ["_static"]
-# revealjs_style_theme = "black"
+revealjs_style_theme = "black"
 revealjs_script_conf = {
     'controls': True,
     'progress': True,
