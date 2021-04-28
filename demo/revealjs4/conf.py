@@ -6,28 +6,25 @@
 project = "sphinx-revealit"
 copyright = "2021, Thetadev"
 author = "ThetaDev"
-version = ""
-release = "0.1.0"
+version = '0.1.0'
+release = version
 
 # -- General configuration ---------------------------------------------------
 extensions = ["sphinx_revealit"]
 templates_path = ["_templates"]
 source_suffix = ".rst"
 master_doc = "index"
-language = None
+language = 'en'
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
-pygments_style = None
+pygments_style = 'vs'
 
 # -- Options for HTML output -------------------------------------------------
 html_theme = "alabaster"
-html_theme_options = {
-    "revealjs_theme": "league",
-}
 html_static_path = ["_static"]
 
 # -- Options for Reveal.js output ---------------------------------------------
 revealjs_static_path = ["_static"]
-revealjs_style_theme = "black"
+# revealjs_style_theme = "black"
 revealjs_script_conf = {
     'controls': True,
     'progress': True,
@@ -50,6 +47,3 @@ revealjs_script_plugins = [
 revealjs_css_files = [
     "revealjs4/plugin/highlight/monokai.css",
 ]
-
-revealjs_font_body = 'monospace'
-
