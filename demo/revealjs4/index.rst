@@ -5,6 +5,10 @@ sphinx-revealit
 .. rjs-deck::
   :stylesheet: _static/style.css
 
+.. rjs-section::
+  :center:
+  :class: abc def
+
 .. rjs-title:: 4
   Create awesome presentations using Sphinx
 

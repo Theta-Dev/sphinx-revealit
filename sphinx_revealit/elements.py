@@ -18,7 +18,10 @@ class AttrVal(Attr):
         self.val = val
 
     def __repr__(self):
-        return self.val
+        return repr(self.val)
+
+    def __str__(self):
+        return str(self.val)
 
     def out(self, elm: 'RjsElement', env_imgpath, env_images):
         return '="%s"' % self.val
@@ -70,7 +73,9 @@ class OptionCClass(Option):
         super().__init__('')
 
     def apply(self, elm: 'RjsElement', val):
-        elm.add_cls(val)
+        classes = str(val).split()
+        for c in classes:
+            elm.add_cls(c)
 
 
 class OptionImage(Option):
@@ -205,6 +210,9 @@ class RjsElementSection(RjsElement):
         'auto-animate-duration': Option('data-auto-animate-duration'),
         'auto-animate-delay': Option('data-auto-animate-delay'),
         'visibility': Option('data-visibility'),
+
+        'center': OptionClass('center'),
+        'class': OptionCClass(),
 
         'notitle': OptionCDataFlag('notitle'),
     }
