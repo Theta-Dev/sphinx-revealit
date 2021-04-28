@@ -8,3 +8,4 @@ beautifulsoup4==4.9.3
 bump2version
 sphinx-rtd-theme
 Sphinx==3.4.3
+wheel
