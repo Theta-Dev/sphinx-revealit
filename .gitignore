@@ -299,3 +299,4 @@ pip-selfcheck.json
 
 # End of https://www.toptal.com/developers/gitignore/api/python,virtualenv,visualstudiocode,node
 .idea
+ms_sphinx.toml

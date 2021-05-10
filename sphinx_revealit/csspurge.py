@@ -93,15 +93,14 @@ class CSSPurge:
                     in_comment = True
                     dont_parse_next = True
 
-                if bracket_level > 0:
-                    if c == '}':
-                        bracket_level -= 1
-                        if bracket_level == 0:
-                            rules.append(CSSRule(cur_rule))
-                            cur_rule = ''
-                else:
-                    if c == '{':
-                        bracket_level += 1
+                if c == '{':
+                    bracket_level += 1
+                elif c == '}' and bracket_level > 0:
+                    bracket_level -= 1
+                    if bracket_level == 0:
+                        rules.append(CSSRule(cur_rule))
+                        cur_rule = ''
+
         return rules
 
     def _filter_rules(self, whitelist: Iterable) -> List[CSSRule]:

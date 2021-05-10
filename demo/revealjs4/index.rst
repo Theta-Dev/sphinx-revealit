@@ -180,3 +180,19 @@ Let's test some divs:
   .. rjs-div:: bg-purple-800 text-right
   
     Text in col3
+
+
+Simple code
+===========
+
+.. code-block:: python
+  :linenos:
+  :emphasize-lines: 1,5
+  
+  def hello_world():
+    print('Hello World')
+    print('This is me')
+
+  def __main__():
+    hello_world()
+
