@@ -9,6 +9,7 @@ from sphinx.environment.collectors import EnvironmentCollector
 from sphinx.locale import __
 from sphinx.util import logging
 
+from sphinx_revealit.elements import RjsElement
 from sphinx_revealit.nodes import RevealjsNode
 
 logger = logging.getLogger(__name__)
@@ -29,7 +30,7 @@ class RevealjsImageCollector(EnvironmentCollector):
         for node in doctree.traverse(RevealjsNode):
             elm = getattr(node, 'revealit_el', None)
 
-            if elm:
+            if isinstance(elm, RjsElement):
                 for img_uri in elm.get_image_uris():
                     uri = directives.uri(img_uri)
 
@@ -48,3 +49,27 @@ class RevealjsImageCollector(EnvironmentCollector):
                     app.env.images.add_file(docname, imgpath)
 
                     elm.images[img_uri] = imgpath
+
+
+class CSSClassCollector(EnvironmentCollector):
+    def clear_doc(self, app: Sphinx, env: BuildEnvironment, docname: str) -> None:
+        env.rjs_css_classes = set()
+
+    def merge_other(self, app: Sphinx, env: BuildEnvironment,
+                    docnames: Set[str], other: BuildEnvironment) -> None:
+        env.rjs_css_classes = getattr(env, 'rjs_css_classes', []) | getattr(other, 'rjs_css_classes', [])
+
+    def process_doc(self, app: Sphinx, doctree: nodes.document) -> None:
+        if not hasattr(app.env, 'rjs_css_classes'):
+            app.env.rjs_css_classes = set()
+
+        for node in doctree.traverse():
+            if hasattr(node, 'attributes') and node.attributes.get('classes'):
+                app.env.rjs_css_classes.update(node.attributes['classes'])
+
+            elm = getattr(node, 'revealit_el', None)
+
+            if isinstance(elm, RjsElement):
+                app.env.rjs_css_classes.update(elm.classes)
+
+        pass

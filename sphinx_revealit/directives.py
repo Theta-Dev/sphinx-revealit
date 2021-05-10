@@ -19,7 +19,7 @@ from sphinx_revealit.nodes import (
     revealjs_section,
     revealjs_deck,
     revealjs_effect,
-    revealjs_shape,
+    revealjs_div,
     revealjs_title,
 )
 from sphinx_revealit.transforms import RevealjsIdAttribute
@@ -234,14 +234,15 @@ class RevealjsLiteralInclude(LiteralInclude):
         return code_block_post(self, nodes, hl_lines)
 
 
-class RevealjsShape(Directive):
+class RevealjsDiv(Directive):
     has_content = True
     option_spec = RjsElementBox.option_spec()
-    required_arguments = RjsElementBox.n_req_arguments
-    optional_arguments = RjsElementBox.n_opt_arguments()
+    required_arguments = 0
+    optional_arguments = 1
+    final_argument_whitespace = True
 
     def run(self) -> List[nodes.Node]:
-        node = revealjs_shape()
+        node = revealjs_div()
         node.revealit_el = RjsElementBox.from_directive(self)
 
         if self.content:

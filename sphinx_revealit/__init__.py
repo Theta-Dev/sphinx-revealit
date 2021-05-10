@@ -15,7 +15,7 @@ from sphinx_revealit.directives import (
     RevealjsEffects,
     RevealjsCode,
     RevealjsLiteralInclude,
-    RevealjsShape,
+    RevealjsDiv,
     RevealjsTitle,
 )
 from sphinx_revealit.nodes import (
@@ -24,7 +24,7 @@ from sphinx_revealit.nodes import (
     revealjs_section,
     revealjs_deck,
     revealjs_effect,
-    revealjs_shape,
+    revealjs_div,
     revealjs_title,
 )
 from sphinx_revealit.themes import get_theme_path
@@ -56,7 +56,7 @@ def setup(app: Sphinx):
         revealjs_effect, html=(not_write, not_write), revealjs=(visit_revealjs_element, depart_revealjs_element)
     )
     app.add_node(
-        revealjs_shape, html=(not_write, not_write), revealjs=(visit_revealjs_element, depart_revealjs_element)
+        revealjs_div, html=(not_write, not_write), revealjs=(visit_revealjs_element, depart_revealjs_element)
     )
     app.add_node(
         revealjs_title, html=(not_write, not_write), revealjs=(visit_revealjs_element, depart_revealjs_element)
@@ -71,7 +71,7 @@ def setup(app: Sphinx):
     app.add_directive('rjs-effects', RevealjsEffects)
     app.add_directive('rjs-code', RevealjsCode)
     app.add_directive('rjs-literalinclude', RevealjsLiteralInclude)
-    app.add_directive('rjs-shape', RevealjsShape)
+    app.add_directive('rjs-div', RevealjsDiv)
     app.add_directive('rjs-title', RevealjsTitle)
 
     app.add_config_value('revealjs_use_section_ids', False, True)

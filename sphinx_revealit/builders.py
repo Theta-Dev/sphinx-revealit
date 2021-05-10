@@ -1,14 +1,18 @@
 """Definition for sphinx custom builder."""
 import copy
 import logging
+from os import path
 from typing import Any, Dict, List, Tuple
 
 from docutils.nodes import Node
 from docutils.parsers.rst import directives
+from importlib_resources import files
 from sphinx.builders.html import StandaloneHTMLBuilder
+from sphinx.util import progress_message
 
-from sphinx_revealit.collectors import RevealjsImageCollector
+from sphinx_revealit.collectors import RevealjsImageCollector, CSSClassCollector
 from sphinx_revealit.contexts import RevealjsPlugin, RevealjsProjectContext
+from sphinx_revealit.csspurge import CSSPurge
 from sphinx_revealit.nodes import RevealjsNode
 from sphinx_revealit.utils import static_resource_uri
 from sphinx_revealit.writers import RevealjsSlideTranslator
@@ -31,6 +35,7 @@ class RevealjsHTMLBuilder(StandaloneHTMLBuilder):
         self.revealjs_deck = None
 
         app.add_env_collector(RevealjsImageCollector)
+        app.add_env_collector(CSSClassCollector)
 
     @property
     def revealjs_deck_opts(self) -> dict:
@@ -62,6 +67,7 @@ class RevealjsHTMLBuilder(StandaloneHTMLBuilder):
 
     def init_css_files(self) -> None:  # noqa
         self.add_css_file(self.revealjs_context.engine.css_path)
+        self.add_css_file('tailwind.css')
         for filename in self.get_builder_config('css_files', 'revealjs'):
             self.add_css_file(filename)
 
@@ -157,3 +163,15 @@ class RevealjsHTMLBuilder(StandaloneHTMLBuilder):
                     self.images[img] = self.env.images[img][1]
 
         super().post_process_images(doctree)
+
+    def copy_static_files(self) -> None:
+        super().copy_static_files()
+
+        with progress_message('purging tailwind.css'):
+            whitelist = set()
+
+            if hasattr(self.app.env, 'rjs_css_classes'):
+                whitelist = self.app.env.rjs_css_classes
+
+            purge = CSSPurge.from_file(files('sphinx_revealit.res').joinpath('tailwind.css'))
+            purge.purge_to_file(whitelist, path.join(self.outdir, '_static', 'tailwind.css'))

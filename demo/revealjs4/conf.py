@@ -4,7 +4,7 @@
 
 # -- Project information -----------------------------------------------------
 project = "sphinx-revealit"
-copyright = "2021, Thetadev"
+copyright = "2021, ThetaDev"
 author = "ThetaDev"
 version = '0.1.0'
 release = version
@@ -38,6 +38,7 @@ revealjs_script_conf = {
     'margin': 0.04,
 }
 
+'''
 revealjs_script_plugins = [
     {
         "name": "RevealHighlight",
@@ -47,3 +48,4 @@ revealjs_script_plugins = [
 revealjs_css_files = [
     "revealjs4/plugin/highlight/monokai.css",
 ]
+'''

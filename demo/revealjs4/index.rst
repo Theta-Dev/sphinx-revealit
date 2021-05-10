@@ -12,6 +12,8 @@ sphinx-revealit
 .. rjs-title:: 4
   Create awesome presentations using Sphinx
 
+.. rst-class:: testclass
+
 ``sphinx-revealit`` is an extenstion for the Sphinx documentation generator
 that allows you to build HTML-based presentations using the RevealJS library.
 
@@ -146,20 +148,35 @@ Animation time
   This is me
 
 
-YT video
-========
+..
+  YT video
+  ========
+  
+  .. rjs-section::
+    :background-iframe: https://www.youtube.com/embed/XaqR3G_NVoo
+    :background-size: contain
+    :notitle:
 
-.. rjs-section::
-  :background-iframe: https://www.youtube.com/embed/XaqR3G_NVoo
-  :background-size: contain
-  :notitle:
 
+DIVs
+====
 
-Shapes
-======
+Let's test some divs:
 
-Let's test some shapes:
+.. rjs-div:: grid grid-cols-3 gap-4
 
-.. rjs-shape:: box
+  .. rjs-div:: bg-purple-600 text-left
+  
+    Text in col1
 
-  Text in shape
+  .. rjs-div:: bg-purple-700
+  
+    Text in col2
+
+    .. rst-class:: text-red-500
+    
+    Some RED text
+
+  .. rjs-div:: bg-purple-800 text-right
+  
+    Text in col3

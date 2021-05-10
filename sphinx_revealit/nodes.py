@@ -53,7 +53,7 @@ class revealjs_effect(RevealjsNode):
     pass
 
 
-class revealjs_shape(RevealjsNode):
+class revealjs_div(RevealjsNode):
     pass
 
 
