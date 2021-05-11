@@ -78,6 +78,7 @@ def setup(app: Sphinx):
 
     app.add_config_value('revealjs_static_path', [], True)
     app.add_config_value('revealjs_style_theme', 'black', True)
+    app.add_config_value('revealjs_use_tailwind', False, True)
     app.add_config_value('revealjs_css_files', [], True)
     app.add_config_value('revealjs_script_files', [], True)
     app.add_config_value('revealjs_script_conf', None, True)

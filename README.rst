@@ -1,9 +1,25 @@
 ###############
-sphinx-revealit
+Sphinx-RevealIT
 ###############
 
-Create beautifully animated presentations with the Sphinx documentation
-builder.
+Create beautifully animated presentations with the Sphinx documentation builder.
+
+Reveal.js is a javascript-based presentation library created by Hakim El Hattab.
+It transforms HTML documents into interactive presentations which can be viewed
+in any browser.
+
+Sphinx-RevealIT is an extension for the popular Sphinx documentation builder
+that can generate these presentations from simple ReStructured text.
+
+It includes various directives that allow you to use most of Reveal's functionality
+like animated fragments and code blocks or custom background and animations.
+
+Sphinx-RevealIT comes with the tailwind.css framework out of the box, which makes
+custom formatting and layouting super easy.
+
+Note that Sphinx-RevealIT is not compatible with old browsers that don't support
+CSS variables (like IE11).
+
 
 Usage
 #####
@@ -18,6 +34,8 @@ Usage
 
     revealjs_static_path = ["_static"]
     revealjs_style_theme = "black"
+    revealjs_use_tailwind = True
+
     revealjs_script_conf = {
         'controls': True,
         'progress': True,
@@ -222,16 +240,24 @@ Config values
 +-----------------------------+------------------+-----------+-------------------------------------------+
 | Attribute                   | Value            | Default   | Description                               |
 +=============================+==================+===========+===========================================+
-| revealjs\_static\_path      | List             | []        | Static file folder for RevealJS builder   |
+| revealjs_static_path        | List             | []        | Static file folder for RevealJS builder   |
 +-----------------------------+------------------+-----------+-------------------------------------------+
-| revealjs\_style\_theme      | RevealJS Theme   | black     | RevealJS theme (builtin or css file)      |
+| revealjs_style_theme        | RevealJS Theme   | black     | RevealJS theme (builtin or css file)      |
 +-----------------------------+------------------+-----------+-------------------------------------------+
-| revealjs\_script\_files     | List             | []        | Extra JS files to include                 |
+| revealjs_use_tailwind       | bool             | False     | Use tailwind.css framework                |
 +-----------------------------+------------------+-----------+-------------------------------------------+
-| revealjs\_script\_conf      | dict             | {}        | RevealJS config                           |
+| revealjs_script_files       | List             | []        | Extra JS files to include                 |
 +-----------------------------+------------------+-----------+-------------------------------------------+
-| revealjs\_script\_plugins   | List             | []        | RevealJS plugins                          |
+| revealjs_script_conf        | dict             | {}        | RevealJS config                           |
 +-----------------------------+------------------+-----------+-------------------------------------------+
-| revealjs\_css\_files        | List             | []        | Extra CSS files to include                |
+| revealjs_script_plugins     | List             | []        | RevealJS plugins                          |
++-----------------------------+------------------+-----------+-------------------------------------------+
+| revealjs_css_files          | List             | []        | Extra CSS files to include                |
 +-----------------------------+------------------+-----------+-------------------------------------------+
 
+
+Thank you
+#########
+
+goes to Kazuya Takei who created the original sphinx-revealjs project from which this is a fork of.
+Also thanks tho Hakim El Hattab, creator of the Reveal.js presentation framework. 

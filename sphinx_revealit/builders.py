@@ -38,7 +38,9 @@ class RevealjsHTMLBuilder(StandaloneHTMLBuilder):
         self.builtin_files = set()
 
         app.add_env_collector(RevealjsImageCollector)
-        app.add_env_collector(CSSClassCollector)
+
+        if self.config.revealjs_use_tailwind:
+            app.add_env_collector(CSSClassCollector)
 
     @property
     def revealjs_deck_opts(self) -> dict:
@@ -78,13 +80,15 @@ class RevealjsHTMLBuilder(StandaloneHTMLBuilder):
         super().init()
 
     def init_css_files(self) -> None:  # noqa
-        self.add_css_file(self.revealjs_context.engine.css_path, priority=0)
-        self.add_css_file('tailwind.css', priority=0)
-        self.add_css_file(self._get_style_filename(), priority=100)
-        self.add_css_file('pygments.css', priority=300)
+        self.add_css_file(self.revealjs_context.engine.css_path)
+        self.add_css_file(self._get_style_filename())
+        self.add_css_file('pygments.css')
+
+        if self.config.revealjs_use_tailwind:
+            self.add_css_file('tailwind.css')
 
         for filename in self.get_builder_config('css_files', 'revealjs'):
-            self.add_css_file(filename, priority=400)
+            self.add_css_file(filename)
 
     def init_js_files(self) -> None:
         for filename, attrs in self.app.registry.js_files:
@@ -144,8 +148,8 @@ class RevealjsHTMLBuilder(StandaloneHTMLBuilder):
             self.builtin_files.add(self.get_builtin_theme_path(theme))
             theme = f'_static/{theme}.css'
 
-        # 0: Reveal.js, 1: Tailwind, 2: Revealit styles
-        ctx['css_files'].insert(3, theme)
+        # 0: Reveal.js, 1: Revealit styles 2: THEME
+        ctx['css_files'].insert(2, theme)
 
     def configure_page_script_conf(self) -> List[str]:  # noqa
         if not self.revealjs_deck:
@@ -200,11 +204,12 @@ class RevealjsHTMLBuilder(StandaloneHTMLBuilder):
                                  stringify_func=path.basename):
             shutil.copyfile(f, path.join(self.outdir, '_static', path.basename(f)))
 
-        with progress_message('purging tailwind.css'):
-            whitelist = set()
+        if self.config.revealjs_use_tailwind:
+            with progress_message('purging tailwind.css'):
+                whitelist = set()
 
-            if hasattr(self.app.env, 'rjs_css_classes'):
-                whitelist = self.app.env.rjs_css_classes
+                if hasattr(self.app.env, 'rjs_css_classes'):
+                    whitelist = self.app.env.rjs_css_classes
 
-            purge = CSSPurge.from_file(files('sphinx_revealit.res').joinpath('tailwind.css'))
-            purge.purge_to_file(whitelist, path.join(self.outdir, '_static', 'tailwind.css'))
+                purge = CSSPurge.from_file(files('sphinx_revealit.res').joinpath('tailwind.css'))
+                purge.purge_to_file(whitelist, path.join(self.outdir, '_static', 'tailwind.css'))
