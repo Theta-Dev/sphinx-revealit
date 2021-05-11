@@ -1,5 +1,7 @@
 import json
 
+from pygments.formatters.html import HtmlFormatter
+
 """Util as functions for some modules."""
 
 
@@ -32,3 +34,34 @@ def escapejson(string):
 
 def to_json(obj):
     return escapejson(json.dumps(obj, ensure_ascii=False))
+
+
+class RjsPygmentsFormatter(HtmlFormatter):
+    def _wrap_linespans(self, inner):
+        i = self.linenostart
+        for t, line in inner:
+            # Is line of code?
+            if t:
+                lineno = ''
+                if self.linenos:
+                    lineno = '<td class="hljs-ln-numbers"><div class="hljs-ln-line hljs-ln-n" data-line-number="%d">%d</div></td>' % (
+                    i, i)
+
+                yield 1, '<tr>%s<td class="hljs-ln-code"><div class="hljs-ln-line">%s</div></td></tr>\n' % (
+                lineno, line)
+                i += 1
+            else:
+                yield 0, line
+
+    def wrap(self, source, outfile):
+        yield 0, '<table class="hljs-ln"><tbody>\n'
+        yield from source
+        yield 0, '</tbody></table>'
+
+    def format_unencoded(self, tokensource, outfile):
+        source = self._format_lines(tokensource)
+        source = self._wrap_linespans(source)
+        source = self.wrap(source, outfile)
+
+        for t, piece in source:
+            outfile.write(piece)

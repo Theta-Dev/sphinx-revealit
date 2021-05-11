@@ -1,0 +1,18 @@
+pre {
+    color: #000
+}
+
+.highlight code {
+    background: inherit;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.highlight code::-webkit-scrollbar {
+    display: none;
+}
+
+.linenos {
+    padding-right: .75em !important;
+    opacity: .6;
+}

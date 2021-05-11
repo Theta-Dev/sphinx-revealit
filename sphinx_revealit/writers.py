@@ -99,42 +99,45 @@ class RevealjsSlideTranslator(HTML5Translator):
         self.body.append('</aside>\n')
 
     def visit_literal_block(self, node: nodes.literal_block):
-        """Begin ``literal_block`` .
+        """Begin ``literal_block``"""
+        if node.rawsource != node.astext():
+            # most probably a parsed-literal block -- don't highlight
+            return super().visit_literal_block(node)
 
-        Override base method, and open simply ``pre`` and ``code`` tags.
-        """
-        pre_attrs = []
+        lang = node.get('language', 'default')
+        linenos = node.get('linenos', False)
+        highlight_args = node.get('highlight_args', {})
 
-        attrs = [
-            'data-trim',
-            'data-noescape',
-        ]
+        hl_lines = highlight_args.get('hl_lines')
+        if node.attributes.get('revealjs-hl-lines'):
+            hl_lines = node.attributes['revealjs-hl-lines']
+
+        opts = self.config.highlight_options.get(lang, {})
+
+        highlighted = self.highlighter.highlight_block(
+            node.rawsource, lang, opts=opts, linenos=bool(linenos),
+            location=node
+        )
+
+        pre_attrs = {
+            'CLASS': 'highlight highlight-%s notranslate"' % lang,
+        }
+        code_attrs = {
+            'CLASS': 'hljs',
+        }
 
         if node.attributes.get('revealjs-id'):
-            pre_attrs.append('data-id="%s"' % node.attributes['revealjs-id'])
-
-        if node['language']:
-            attrs.append('class="%s"' % node['language'])
-
-        if node.attributes.get('revealjs-hl-lines'):
-            attrs.append('data-line-numbers="%s"' % node.attributes['revealjs-hl-lines'])
-        elif node.attributes.get('highlight_args') and node.attributes['highlight_args'].get('hl_lines'):
-            hl_lines = ','.join([str(x) for x in node.attributes['highlight_args']['hl_lines']])
-            attrs.append('data-line-numbers="%s"' % hl_lines)
-        elif node.attributes.get('linenos'):
-            attrs.append('data-line-numbers')
-
+            pre_attrs['DATA-ID'] = node.attributes['revealjs-id']
+        if hl_lines:
+            code_attrs['DATA-LINE-NUMBERS'] = hl_lines
         if node.attributes.get('revealjs-index'):
-            attrs.append('data-fragment-index="%s"' % node.attributes['revealjs-index'])
+            code_attrs['DATA-FRAGMENT-INDEX'] = node.attributes['revealjs-index']
 
-        self.body.append('<pre %s><code %s>\n' % (' '.join(pre_attrs), ' '.join(attrs)))
+        starttag = self.starttag(node, 'pre', suffix='', **pre_attrs)
+        code_tag = self.starttag({}, 'code', suffix='', **code_attrs)
 
-    def depart_literal_block(self, node: nodes.literal_block):
-        """End ``literal_block``.
-
-        Override base method, and close begun tags.
-        """
-        self.body.append('</code></pre>\n')
+        self.body.append(starttag + code_tag + highlighted + '</code></pre>\n')
+        raise nodes.SkipNode
 
     def visit_paragraph(self, node: nodes.paragraph):
         if node.attributes.get('revealjs-id'):

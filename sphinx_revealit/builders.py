@@ -8,13 +8,14 @@ from docutils.nodes import Node
 from docutils.parsers.rst import directives
 from importlib_resources import files
 from sphinx.builders.html import StandaloneHTMLBuilder
+from sphinx.highlighting import PygmentsBridge
 from sphinx.util import progress_message
 
 from sphinx_revealit.collectors import RevealjsImageCollector, CSSClassCollector
 from sphinx_revealit.contexts import RevealjsPlugin, RevealjsProjectContext
 from sphinx_revealit.csspurge import CSSPurge
 from sphinx_revealit.nodes import RevealjsNode
-from sphinx_revealit.utils import static_resource_uri
+from sphinx_revealit.utils import RjsPygmentsFormatter, static_resource_uri
 from sphinx_revealit.writers import RevealjsSlideTranslator
 
 logger = logging.getLogger(__name__)
@@ -61,13 +62,19 @@ class RevealjsHTMLBuilder(StandaloneHTMLBuilder):
                 for plugin in getattr(self.config, 'revealjs_script_plugins', [])
             ],
         )
+        self.revealjs_context.script_plugins.append(
+            RevealjsPlugin(static_resource_uri('sphinx_revealit.js'), 'sphinx_revealit'))
+
         # Hand over builder configs to html builder.
         setattr(self.config, 'html_static_path', self.config.revealjs_static_path)
         super().init()
 
     def init_css_files(self) -> None:  # noqa
+        self.add_css_file(self._get_style_filename(), priority=200)
         self.add_css_file(self.revealjs_context.engine.css_path)
         self.add_css_file('tailwind.css')
+        self.add_css_file('pygments.css')
+
         for filename in self.get_builder_config('css_files', 'revealjs'):
             self.add_css_file(filename)
 
@@ -129,7 +136,7 @@ class RevealjsHTMLBuilder(StandaloneHTMLBuilder):
         # index 0: '_static/revealjs4/dist/reveal.css'
         # index 1: theme css file path
         # index 2 or later: other css files
-        ctx['css_files'].insert(1, theme)
+        ctx['css_files'].insert(2, theme)
 
     def configure_page_script_conf(self) -> List[str]:  # noqa
         if not self.revealjs_deck:
@@ -142,11 +149,13 @@ class RevealjsHTMLBuilder(StandaloneHTMLBuilder):
         return configs
 
     def init_highlighter(self) -> None:
-        self.highlighter = None
-        self.dark_highlighter = None
+        PygmentsBridge.html_formatter = RjsPygmentsFormatter
+        super().init_highlighter()
 
+    '''
     def create_pygments_style_file(self) -> None:
         pass
+    '''
 
     def write_genindex(self) -> None:
         pass

@@ -118,8 +118,9 @@ Fourth#2 slide
 .. rjs-section::
   :background-image: /img/dir1/cat.jpeg
 
-.. rjs-literalinclude:: run.py
-  :emphasize-lines: 1-3|4-5
+.. rjs-literalinclude:: conf.py
+  :linenos:
+  :emphasize-lines: 6-10|26-28
 
 
 Animation time
@@ -187,7 +188,6 @@ Simple code
 
 .. code-block:: python
   :linenos:
-  :emphasize-lines: 1,5
   
   def hello_world():
     print('Hello World')

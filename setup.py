@@ -16,7 +16,8 @@ setup(
     packages=find_packages(exclude=('tests', 'docs')),
     install_requires=[
         'docutils',
-        'sphinx',
+        'pygments',
+        'sphinx>=4',
         'importlib_resources'
     ],
     include_package_data=True,

@@ -14,9 +14,6 @@ class CSSRule:
             self.classes.update(re.findall(r'\.\\?([\w\d\-_]+)', sels))
 
     def matches_whitelist(self, whitelist: Iterable):
-        if not self.classes:
-            return True
-
         for cls in self.classes:
             if cls in whitelist:
                 return True
@@ -111,5 +108,7 @@ class CSSPurge:
         return ''.join([str(rule) for rule in filtered_rules])
 
     def purge_to_file(self, whitelist: Iterable, out_file):
+        out_css = self.purge(whitelist)
+
         with open(out_file, 'w', encoding='utf-8') as f:
-            f.write(self.purge(whitelist))
+            f.write(out_css)
