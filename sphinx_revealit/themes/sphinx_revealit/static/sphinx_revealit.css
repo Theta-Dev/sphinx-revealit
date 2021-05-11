@@ -40,7 +40,7 @@ footer, header, hgroup, main, menu, nav, section {
     --main-font: Source Sans Pro, Helvetica, sans-serif;
     --main-font-size: 40px;
     --main-color: #000;
-    --block-margin: 20px 0;
+    --block-margin: 16px 0;
     --heading-margin: 0 0 20px 0;
     --heading-font: var(--main-font);
     --heading-color: var(--main-color);
