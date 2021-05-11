@@ -47,8 +47,6 @@ class RevealjsSlideTranslator(HTML5Translator):
         else:
             elm = RjsElementSection()
 
-        # if node.attributes.get('ids') and self.config.revealjs_use_section_ids:
-        #     attrs += ' id='{}''.format(node.attributes['ids'][-1])
         if self.section_level == 1:
             self.builder.revealjs_deck = find_child_section(node, 'revealjs_deck')
             self._proc_first_on_section = True

@@ -13,7 +13,6 @@ release = version
 extensions = ["sphinx_revealit"]
 templates_path = ["_templates"]
 source_suffix = ".rst"
-master_doc = "index"
 language = 'en'
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 pygments_style = 'monokai'

@@ -76,7 +76,6 @@ def setup(app: Sphinx):
     app.add_directive('rjs-box', RevealjsBox)
     app.add_directive('rjs-title', RevealjsTitle)
 
-    app.add_config_value('revealjs_use_section_ids', False, True)
     app.add_config_value('revealjs_static_path', [], True)
     app.add_config_value('revealjs_style_theme', 'black', True)
     app.add_config_value('revealjs_css_files', [], True)
