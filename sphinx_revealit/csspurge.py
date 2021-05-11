@@ -1,5 +1,5 @@
 import re
-from typing import List, Iterable
+from typing import List, Set, Iterable
 
 
 class CSSRule:
@@ -99,6 +99,16 @@ class CSSPurge:
                         cur_rule = ''
 
         return rules
+
+    @staticmethod
+    def classes_from_html(html: str) -> Set[str]:
+        classes = set()
+
+        for cls_str in re.findall(r'class="([\w\d\-_: ]+)"', html):
+            cls_str = cls_str.replace(':', ' ')
+            classes.update(cls_str.split())
+
+        return classes
 
     def _filter_rules(self, whitelist: Iterable) -> List[CSSRule]:
         return list(filter(lambda r: r.matches_whitelist(whitelist), self.css_rules))

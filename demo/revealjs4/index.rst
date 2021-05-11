@@ -166,11 +166,11 @@ Let's test some divs:
 
 .. rjs-div:: grid grid-cols-3 gap-4
 
-  .. rjs-div:: bg-purple-600 text-left
+  .. rjs-box:: bg-purple-600 text-left
   
     Text in col1
 
-  .. rjs-div:: bg-purple-700
+  .. rjs-box:: bg-purple-700
   
     Text in col2
 
@@ -178,21 +178,30 @@ Let's test some divs:
     
     Some RED text
 
-  .. rjs-div:: bg-purple-800 text-right
+  .. rjs-box:: bg-purple-800 text-right
   
     Text in col3
 
 
-Simple code
-===========
+Side by side
+============
 
-.. code-block:: python
-  :linenos:
+.. rjs-div:: grid grid-cols-2 gap-8
+
+  .. rjs-box:: bg-green-800
+
+    **Advantages:**
   
-  def hello_world():
-    print('Hello World')
-    print('This is me')
+    .. rjs-fragments::
+  
+      - ADV1
+      - ADV2
 
-  def __main__():
-    hello_world()
+  .. rjs-box:: bg-red-800
 
+    **Disadvantages:**
+  
+    .. rjs-fragments::
+  
+      - DIS1
+      - DIS2

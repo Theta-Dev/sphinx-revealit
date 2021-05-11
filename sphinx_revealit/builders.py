@@ -1,6 +1,7 @@
 """Definition for sphinx custom builder."""
 import copy
 import logging
+import shutil
 from os import path
 from typing import Any, Dict, List, Tuple
 
@@ -9,7 +10,7 @@ from docutils.parsers.rst import directives
 from importlib_resources import files
 from sphinx.builders.html import StandaloneHTMLBuilder
 from sphinx.highlighting import PygmentsBridge
-from sphinx.util import progress_message
+from sphinx.util import progress_message, status_iterator
 
 from sphinx_revealit.collectors import RevealjsImageCollector, CSSClassCollector
 from sphinx_revealit.contexts import RevealjsPlugin, RevealjsProjectContext
@@ -34,6 +35,7 @@ class RevealjsHTMLBuilder(StandaloneHTMLBuilder):
     def __init__(self, app):  # noqa: D107
         super().__init__(app)
         self.revealjs_deck = None
+        self.builtin_files = set()
 
         app.add_env_collector(RevealjsImageCollector)
         app.add_env_collector(CSSClassCollector)
@@ -45,6 +47,21 @@ class RevealjsHTMLBuilder(StandaloneHTMLBuilder):
         return {}
 
     def init(self):  # noqa
+        # Always add sphinx_revealit plugin
+        plugins = [
+            RevealjsPlugin(static_resource_uri('sphinx_revealit.js'), 'sphinx_revealit')
+        ]
+
+        # Collect user-defined plugins
+        for plugin in getattr(self.config, 'revealjs_script_plugins', []):
+            # Builtin plugin
+            if isinstance(plugin, str):
+                self.builtin_files.add(self.get_builtin_plugin_path(plugin))
+                plugins.append(RevealjsPlugin(static_resource_uri(plugin + '.js'), plugin))
+            else:
+                uri = static_resource_uri(plugin['src'])
+                plugins.append(RevealjsPlugin(uri, plugin.get('name', '')))
+
         # Create RevealjsProjectContext
         self.revealjs_context = RevealjsProjectContext(
             4,
@@ -53,30 +70,21 @@ class RevealjsHTMLBuilder(StandaloneHTMLBuilder):
                 for src in getattr(self.config, 'revealjs_script_files', [])
             ],
             getattr(self.config, 'revealjs_script_conf', dict()),
-            [
-                RevealjsPlugin(
-                    static_resource_uri(plugin['src']),
-                    plugin.get('name', ''),
-                    plugin.get('options', '{}').strip(),
-                )
-                for plugin in getattr(self.config, 'revealjs_script_plugins', [])
-            ],
+            plugins,
         )
-        self.revealjs_context.script_plugins.append(
-            RevealjsPlugin(static_resource_uri('sphinx_revealit.js'), 'sphinx_revealit'))
 
         # Hand over builder configs to html builder.
         setattr(self.config, 'html_static_path', self.config.revealjs_static_path)
         super().init()
 
     def init_css_files(self) -> None:  # noqa
-        self.add_css_file(self._get_style_filename(), priority=200)
-        self.add_css_file(self.revealjs_context.engine.css_path)
-        self.add_css_file('tailwind.css')
-        self.add_css_file('pygments.css')
+        self.add_css_file(self.revealjs_context.engine.css_path, priority=0)
+        self.add_css_file('tailwind.css', priority=0)
+        self.add_css_file(self._get_style_filename(), priority=100)
+        self.add_css_file('pygments.css', priority=300)
 
         for filename in self.get_builder_config('css_files', 'revealjs'):
-            self.add_css_file(filename)
+            self.add_css_file(filename, priority=400)
 
     def init_js_files(self) -> None:
         for filename, attrs in self.app.registry.js_files:
@@ -132,11 +140,12 @@ class RevealjsHTMLBuilder(StandaloneHTMLBuilder):
         elif theme.endswith('.css'):
             theme = f'_static/{theme}'
         else:
-            theme = f'_static/{self.revealjs_context.engine.theme_dir}/{theme}.css'
-        # index 0: '_static/revealjs4/dist/reveal.css'
-        # index 1: theme css file path
-        # index 2 or later: other css files
-        ctx['css_files'].insert(2, theme)
+            # Builtin theme
+            self.builtin_files.add(self.get_builtin_theme_path(theme))
+            theme = f'_static/{theme}.css'
+
+        # 0: Reveal.js, 1: Tailwind, 2: Revealit styles
+        ctx['css_files'].insert(3, theme)
 
     def configure_page_script_conf(self) -> List[str]:  # noqa
         if not self.revealjs_deck:
@@ -151,11 +160,6 @@ class RevealjsHTMLBuilder(StandaloneHTMLBuilder):
     def init_highlighter(self) -> None:
         PygmentsBridge.html_formatter = RjsPygmentsFormatter
         super().init_highlighter()
-
-    '''
-    def create_pygments_style_file(self) -> None:
-        pass
-    '''
 
     def write_genindex(self) -> None:
         pass
@@ -173,8 +177,28 @@ class RevealjsHTMLBuilder(StandaloneHTMLBuilder):
 
         super().post_process_images(doctree)
 
+    @staticmethod
+    def _get_builtin_file_path(d, f):
+        f = files('sphinx_revealit.res').joinpath(d).joinpath(f)
+        if not path.isfile(f):
+            raise FileNotFoundError
+        return f
+
+    @staticmethod
+    def get_builtin_theme_path(name: str):
+        return RevealjsHTMLBuilder._get_builtin_file_path('theme', name + '.css')
+
+    @staticmethod
+    def get_builtin_plugin_path(name: str):
+        return RevealjsHTMLBuilder._get_builtin_file_path('plugin', name + '.js')
+
     def copy_static_files(self) -> None:
         super().copy_static_files()
+
+        for f in status_iterator(self.builtin_files, 'copying builtin files', 'brown',
+                                 len(self.builtin_files), self.app.verbosity,
+                                 stringify_func=path.basename):
+            shutil.copyfile(f, path.join(self.outdir, '_static', path.basename(f)))
 
         with progress_message('purging tailwind.css'):
             whitelist = set()

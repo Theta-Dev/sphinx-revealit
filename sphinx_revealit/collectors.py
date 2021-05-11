@@ -9,6 +9,7 @@ from sphinx.environment.collectors import EnvironmentCollector
 from sphinx.locale import __
 from sphinx.util import logging
 
+from sphinx_revealit.csspurge import CSSPurge
 from sphinx_revealit.elements import RjsElement
 from sphinx_revealit.nodes import RevealjsNode
 
@@ -66,6 +67,9 @@ class CSSClassCollector(EnvironmentCollector):
         for node in doctree.traverse():
             if hasattr(node, 'attributes') and node.attributes.get('classes'):
                 app.env.rjs_css_classes.update(node.attributes['classes'])
+
+            if getattr(node, 'tagname', None) == 'raw' and node.attributes.get('format') == 'html':
+                app.env.rjs_css_classes.update(CSSPurge.classes_from_html(node.rawsource))
 
             elm = getattr(node, 'revealit_el', None)
 

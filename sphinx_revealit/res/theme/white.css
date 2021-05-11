@@ -1,0 +1,18 @@
+/**
+ * White theme for reveal.js. This is the opposite of the 'black' theme.
+ *
+ * By Hakim El Hattab, http://hakim.se
+ */
+:root {
+    --background-color: #fff;
+    --main-font-size: 42px;
+    --main-color: #222;
+    --heading-text-transform: uppercase;
+    --heading-font-weight: 600;
+    --heading1-size: 2.5em;
+    --heading2-size: 1.6em;
+    --heading3-size: 1.3em;
+    --heading4-size: 1em;
+    --link-color: #2a76dd;
+    --link-color-hover: #6ca0e8;
+}

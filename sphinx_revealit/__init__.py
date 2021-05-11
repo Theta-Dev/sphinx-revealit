@@ -16,6 +16,7 @@ from sphinx_revealit.directives import (
     RevealjsCode,
     RevealjsLiteralInclude,
     RevealjsDiv,
+    RevealjsBox,
     RevealjsTitle,
 )
 from sphinx_revealit.nodes import (
@@ -72,6 +73,7 @@ def setup(app: Sphinx):
     app.add_directive('rjs-code', RevealjsCode)
     app.add_directive('rjs-literalinclude', RevealjsLiteralInclude)
     app.add_directive('rjs-div', RevealjsDiv)
+    app.add_directive('rjs-box', RevealjsBox)
     app.add_directive('rjs-title', RevealjsTitle)
 
     app.add_config_value('revealjs_use_section_ids', False, True)

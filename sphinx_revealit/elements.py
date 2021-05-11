@@ -247,13 +247,19 @@ class RjsElementFragments(RjsElement):
     }
 
 
-class RjsElementBox(RjsElement):
+class RjsElementDiv(RjsElement):
     tag = 'div'
     arguments = [OptionCClass()]
     options = {
         'data-id': Option('data-id'),
         'style': Option('style'),
     }
+
+
+class RjsElementBox(RjsElementDiv):
+    def __init__(self, arguments: list = None, options: dict = None):
+        super().__init__(arguments, options)
+        self.classes.append('box')
 
 
 class RjsElementTitle(RjsElement):

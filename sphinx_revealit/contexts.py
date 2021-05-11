@@ -8,30 +8,27 @@ class RevealjsEngine:
     """Reveal.js core metadata."""
 
     def __init__(
-        self, version: int, js_path: str, css_path: str, theme_dir: str
+        self, version: int, js_path: str, css_path: str
     ):  # noqa
         self.version = version
         self.js_path = js_path
         self.css_path = css_path
-        self.theme_dir = theme_dir
 
     @classmethod
     def from_version(cls, version: int = 4):  # noqa
         return cls(
             version,
-            'revealjs4/dist/reveal.js',
-            'revealjs4/dist/reveal.css',
-            'revealjs4/dist/theme',
+            'revealjs/reveal.js',
+            'revealjs/reveal.css',
         )
 
 
 class RevealjsPlugin:
     '''Plugin metadata.'''
 
-    def __init__(self, src: str, name: str = None, options: str = None):  # noqa
+    def __init__(self, src: str, name: str = None):  # noqa
         self.src = src
         self.name = name
-        self.options = options
 
 
 class RevealjsProjectContext(object):

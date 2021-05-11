@@ -37,3 +37,7 @@ revealjs_script_conf = {
     'height': 1080,
     'margin': 0.04,
 }
+
+revealjs_script_plugins = [
+    'RevealZoom', 'RevealSearch'
+]

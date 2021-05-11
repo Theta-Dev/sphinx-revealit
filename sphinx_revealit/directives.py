@@ -10,6 +10,7 @@ from sphinx_revealit.elements import (
     RjsElementSection,
     RjsElementEffect,
     RjsElementFragments,
+    RjsElementDiv,
     RjsElementBox,
     RjsElementTitle,
 )
@@ -235,6 +236,23 @@ class RevealjsLiteralInclude(LiteralInclude):
 
 
 class RevealjsDiv(Directive):
+    has_content = True
+    option_spec = RjsElementDiv.option_spec()
+    required_arguments = 0
+    optional_arguments = 1
+    final_argument_whitespace = True
+
+    def run(self) -> List[nodes.Node]:
+        node = revealjs_div()
+        node.revealit_el = RjsElementDiv.from_directive(self)
+
+        if self.content:
+            self.state.nested_parse(self.content, self.content_offset, node)
+
+        return [node]
+
+
+class RevealjsBox(Directive):
     has_content = True
     option_spec = RjsElementBox.option_spec()
     required_arguments = 0
