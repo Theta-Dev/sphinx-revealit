@@ -5,7 +5,6 @@
  */
 :root {
     --background-color: #191919;
-    --main-font-size: 42px;
     --main-color: #fff;
     --heading-text-transform: uppercase;
     --heading-font-weight: 600;
@@ -16,4 +15,5 @@
     --link-color: #42affa;
     --link-color-hover: #8dcffc;
     --light-bg-text-color: #222;
+    --dark-bg-text-color: inherit;
 }

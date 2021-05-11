@@ -32,10 +32,6 @@ footer, header, hgroup, main, menu, nav, section {
     display: block;
 }
 
-section.has-dark-background, section.has-dark-background h1, section.has-dark-background h2, section.has-dark-background h3, section.has-dark-background h4, section.has-dark-background h5, section.has-dark-background h6 {
-    color: #fff;
-}
-
 /*********************************************
  * GLOBAL STYLES
  *********************************************/
@@ -64,6 +60,10 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
     --link-color: #00008B;
     --link-color-hover: #0000f1;
     --control-color: var(--link-color);
+    --selection-background-color: rgba(0, 120, 215, 0.8);
+    --selection-color: #fff;
+    --light-bg-text-color: inherit;
+    --dark-bg-text-color: #fff;
 }
 
 .reveal-viewport {
@@ -77,10 +77,32 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
     color: var(--main-color);
 }
 
+.reveal ::selection {
+    color: var(--selection-color);
+    background: var(--selection-background-color);
+    text-shadow: none;
+}
+
+.reveal ::-moz-selection {
+    color: var(--selection-color);
+    background: var(--selection-background-color);
+    text-shadow: none;
+}
+
 .reveal .slides section,
 .reveal .slides section > section {
     line-height: 1.3;
     font-weight: inherit;
+}
+
+section.has-dark-background, section.has-dark-background h1, section.has-dark-background h2, section.has-dark-background h3, section.has-dark-background h4, section.has-dark-background h5, section.has-dark-background h6,
+section.dark-background, section.dark-background h1, section.dark-background h2, section.dark-background h3, section.dark-background h4, section.dark-background h5, section.dark-background h6 {
+    color: var(--dark-bg-text-color);
+}
+
+section.has-light-background, section.has-light-background h1, section.has-light-background h2, section.has-light-background h3, section.has-light-background h4, section.has-light-background h5, section.has-light-background h6,
+section.light-background, section.light-background h1, section.light-background h2, section.light-background h3, section.light-background h4, section.light-background h5, section.light-background h6 {
+    color: var(--light-bg-text-color);
 }
 
 /*********************************************
@@ -333,11 +355,6 @@ section.has-dark-background, section.has-dark-background h1, section.has-dark-ba
     color: var(--link-color-hover);
     text-shadow: none;
     border: none;
-}
-
-.reveal .roll span:after {
-    color: #fff;
-    background: #00003f;
 }
 
 /*********************************************

@@ -1,5 +1,5 @@
 import re
-from typing import List, Set, Iterable
+from typing import List, Set, Iterable, Tuple
 
 
 class CSSRule:
@@ -7,8 +7,7 @@ class CSSRule:
         self.css = css
         self.classes = set()
 
-        no_cmts = CSSPurge.filter_comments(self.css)
-        match = re.search(r'([^{]+){', no_cmts)
+        match = re.search(r'([^{]+){', self.css)
         if match:
             sels = match.group(1)
             self.classes.update(re.findall(r'\.\\?([\w\d\-_]+)', sels))
@@ -25,7 +24,9 @@ class CSSRule:
 
 class CSSPurge:
     def __init__(self, css: str):
-        self.css_rules = self._parse(css)
+        no_comments, cright = self.filter_comments(css)
+        self.css_rules = self._parse(no_comments)
+        self.cright = cright
 
     @classmethod
     def from_file(cls, css_file):
@@ -34,13 +35,17 @@ class CSSPurge:
         return cls(css)
 
     @staticmethod
-    def filter_comments(css: str) -> str:
+    def filter_comments(css: str) -> Tuple[str, str]:
         output = ''
+        cright = ''
         state = 0
+        first_comment = True
 
         for c in css:
             if state < 2:
                 output += c
+            elif first_comment:
+                cright += c
 
             # Initial state, searching for comment
             if state == 0 and c == '/':
@@ -57,10 +62,11 @@ class CSSPurge:
             elif state == 3:
                 if c == '/':
                     state = 0
+                    first_comment = False
                 else:
                     state = 2
 
-        return output
+        return output, cright[:-2].strip()
 
     @staticmethod
     def _parse(css: str) -> List[CSSRule]:
@@ -115,7 +121,8 @@ class CSSPurge:
 
     def purge(self, whitelist: Iterable) -> str:
         filtered_rules = self._filter_rules(whitelist)
-        return ''.join([str(rule) for rule in filtered_rules])
+        css_str = ''.join([str(rule) for rule in filtered_rules])
+        return '/* %s */ %s' % (self.cright, css_str)
 
     def purge_to_file(self, whitelist: Iterable, out_file):
         out_css = self.purge(whitelist)

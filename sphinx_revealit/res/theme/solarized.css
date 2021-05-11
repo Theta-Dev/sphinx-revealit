@@ -1,0 +1,14 @@
+/**
+ * Solarized Light theme for reveal.js.
+ * Author: Achim Staebler
+ */
+:root {
+    --background-color: #fdf6e3;
+    --main-color: #657b83;
+    --heading-color: #586e75;
+    --heading-text-transform: uppercase;
+    --link-color: #42affa;
+    --link-color-hover: #8dcffc;
+    --selection-background-color: #d33682;
+    --selection-color: #fff;
+}

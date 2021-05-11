@@ -1,0 +1,27 @@
+/**
+ * Beige theme for reveal.js.
+ *
+ * Copyright (C) 2011-2012 Hakim El Hattab, http://hakim.se
+ */
+:root {
+    --background-color: #f7f3de;
+    --main-color: #333;
+    --heading-text-transform: uppercase;
+    --heading-font-weight: 600;
+    --heading1-size: 3.77em;
+    --heading2-size: 2.11em;
+    --heading3-size: 1.55em;
+    --heading4-size: 1em;
+    --link-color: #8b743d;
+    --link-color-hover: #c0a86e;
+    --selection-background-color: rgba(79, 64, 28, 0.99);
+}
+
+.reveal-viewport {
+    background: -moz-radial-gradient(center, circle cover, white 0%, #f7f2d3 100%);
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, white), color-stop(100%, #f7f2d3));
+    background: -webkit-radial-gradient(center, circle cover, white 0%, #f7f2d3 100%);
+    background: -o-radial-gradient(center, circle cover, white 0%, #f7f2d3 100%);
+    background: -ms-radial-gradient(center, circle cover, white 0%, #f7f2d3 100%);
+    background: radial-gradient(center, circle cover, white 0%, #f7f2d3 100%);
+}

@@ -1,0 +1,27 @@
+/**
+ * League theme for reveal.js.
+ *
+ * This was the default theme pre-3.0.0.
+ *
+ * Copyright (C) 2011-2012 Hakim El Hattab, http://hakim.se
+ */
+:root {
+    --background-color: #2b2b2b;
+    --main-color: #eee;
+    --heading-text-transform: uppercase;
+    --heading-text-shadow: 0px 0px 6px rgba(0, 0, 0, 0.2);
+    --link-color: #13DAEC;
+    --link-color-hover: #71e9f4;
+    --selection-background-color: #FF5E99;
+    --light-bg-text-color: #222;
+    --dark-bg-text-color: inherit;
+}
+
+.reveal-viewport {
+    background: -moz-radial-gradient(center, circle cover, #555a5f 0%, #1c1e20 100%);
+    background: -webkit-gradient(radial, center center, 0px, center center, 100%, color-stop(0%, #555a5f), color-stop(100%, #1c1e20));
+    background: -webkit-radial-gradient(center, circle cover, #555a5f 0%, #1c1e20 100%);
+    background: -o-radial-gradient(center, circle cover, #555a5f 0%, #1c1e20 100%);
+    background: -ms-radial-gradient(center, circle cover, #555a5f 0%, #1c1e20 100%);
+    background: radial-gradient(center, circle cover, #555a5f 0%, #1c1e20 100%);
+}

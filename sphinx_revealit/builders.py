@@ -181,7 +181,7 @@ class RevealjsHTMLBuilder(StandaloneHTMLBuilder):
     def _get_builtin_file_path(d, f):
         f = files('sphinx_revealit.res').joinpath(d).joinpath(f)
         if not path.isfile(f):
-            raise FileNotFoundError
+            raise FileNotFoundError(f)
         return f
 
     @staticmethod

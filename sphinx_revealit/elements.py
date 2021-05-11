@@ -212,6 +212,8 @@ class RjsElementSection(RjsElement):
         'visibility': Option('data-visibility'),
 
         'center': OptionClass('center'),
+        'dark': OptionClass('dark-background'),
+        'light': OptionClass('light-background'),
         'class': OptionCClass(),
 
         'notitle': OptionCDataFlag('notitle'),

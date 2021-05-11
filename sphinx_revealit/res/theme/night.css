@@ -1,0 +1,15 @@
+/**
+ * Black theme for reveal.js.
+ *
+ * Copyright (C) 2011-2012 Hakim El Hattab, http://hakim.se
+ */
+:root {
+    --background-color: #111;
+    --main-color: #eee;
+    --heading-letter-spacing: -0.03em;
+    --link-color: #e7ad52;
+    --link-color-hover: #f3d7ac;
+    --selection-background-color: #e7ad52;
+    --light-bg-text-color: #222;
+    --dark-bg-text-color: inherit;
+}

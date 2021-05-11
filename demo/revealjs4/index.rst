@@ -4,10 +4,10 @@ sphinx-revealit
 
 .. rjs-deck::
   :stylesheet: _static/style.css
+  :theme: blood
 
 .. rjs-section::
   :center:
-  :class: abc def
 
 .. rjs-title:: 4
   Create awesome presentations using Sphinx
@@ -107,7 +107,7 @@ Fourth slide
 
 .. rjs-section::
   :background-image: /img/cat.jpeg
-
+  :dark:
 
 .. image:: /img/icon-attakei.jpg
 
@@ -117,6 +117,7 @@ Fourth#2 slide
 
 .. rjs-section::
   :background-image: /img/dir1/cat.jpeg
+  :dark:
 
 .. rjs-literalinclude:: conf.py
   :linenos:
@@ -147,16 +148,6 @@ Animation time
   5.fade-out
 
   This is me
-
-
-..
-  YT video
-  ========
-  
-  .. rjs-section::
-    :background-iframe: https://www.youtube.com/embed/XaqR3G_NVoo
-    :background-size: contain
-    :notitle:
 
 
 DIVs
