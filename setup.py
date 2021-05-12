@@ -5,7 +5,7 @@ with open('README.rst') as f:
 
 setup(
     name='sphinx_revealit',
-    version='0.1.0',
+    version='0.1.1',
     py_modules=[],
     url='https://www.github.com/Theta-Dev/sphinx-revealit',
     license='Apache-2.0',
