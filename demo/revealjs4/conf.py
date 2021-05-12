@@ -25,6 +25,7 @@ html_static_path = ["_static"]
 revealjs_static_path = ["_static"]
 revealjs_style_theme = "black"
 revealjs_use_tailwind = True
+revealjs_purge_tailwind = True
 
 revealjs_script_conf = {
     'controls': True,

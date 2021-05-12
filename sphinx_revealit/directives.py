@@ -132,7 +132,7 @@ class RevealjsFragments(Directive):  # noqa: D101
 
         def transform_children(node: nodes.Node, animation):
             to_transform = [
-                nodes.paragraph, nodes.list_item, nodes.image,
+                nodes.paragraph, nodes.list_item, nodes.image, revealjs_div,
             ]
 
             if hasattr(node, 'children'):

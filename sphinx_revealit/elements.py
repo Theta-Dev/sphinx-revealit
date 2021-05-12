@@ -245,7 +245,8 @@ class RjsElementFragments(RjsElement):
     tag = 'div'
     arguments = [OptionCData('animation')]
     options = {
-        'stack': OptionClass('r-stack')
+        'stack': OptionClass('r-stack'),
+        'class': OptionCClass(),
     }
 
 

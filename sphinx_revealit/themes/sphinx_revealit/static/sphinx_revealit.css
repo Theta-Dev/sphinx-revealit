@@ -334,7 +334,7 @@ section.light-background, section.light-background h1, section.light-background 
     margin: var(--block-margin);
 }
 
-.reveal .slides div {
+.reveal .slides div:not(.text-center):not(.text-left):not(.text-right):not(.text-justify) {
     text-align: initial;
 }
 

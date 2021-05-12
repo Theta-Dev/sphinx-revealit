@@ -17,7 +17,7 @@ setup(
     install_requires=[
         'docutils',
         'pygments',
-        'sphinx>=4',
+        'sphinx',
         'importlib_resources'
     ],
     include_package_data=True,

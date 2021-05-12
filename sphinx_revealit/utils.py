@@ -1,6 +1,8 @@
 import json
+import re
 
 from pygments.formatters.html import HtmlFormatter
+from sphinx import __version__
 
 """Util as functions for some modules."""
 
@@ -37,6 +39,8 @@ def to_json(obj):
 
 
 class RjsPygmentsFormatter(HtmlFormatter):
+    """Format code blocks with the same syntax used by highlight.js"""
+
     def _wrap_linespans(self, inner):
         i = self.linenostart
         for t, line in inner:
@@ -45,7 +49,7 @@ class RjsPygmentsFormatter(HtmlFormatter):
                 lineno = ''
                 if self.linenos:
                     lineno = '<td class="hljs-ln-numbers"><div class="hljs-ln-line hljs-ln-n" data-line-number="%d">%d</div></td>' % (
-                    i, i)
+                        i, i)
 
                 yield 1, '<tr>%s<td class="hljs-ln-code"><div class="hljs-ln-line">%s</div></td></tr>\n' % (
                 lineno, line)
@@ -65,3 +69,14 @@ class RjsPygmentsFormatter(HtmlFormatter):
 
         for t, piece in source:
             outfile.write(piece)
+
+
+# Sphinx compatibility helpers
+def sphinx_version():
+    match = re.match(r'(\d+).(\d+).(\d+)', __version__)
+    return tuple(int(x) for x in match.groups())
+
+
+def sphinx_gte_4() -> bool:
+    major, _, _ = sphinx_version()
+    return major >= 4

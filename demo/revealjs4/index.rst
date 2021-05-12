@@ -155,7 +155,8 @@ DIVs
 
 Let's test some divs:
 
-.. rjs-div:: grid grid-cols-3 gap-4
+.. rjs-fragments::
+  :class: grid grid-cols-3 gap-4
 
   .. rjs-box:: bg-purple-600 text-left
   

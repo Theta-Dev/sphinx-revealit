@@ -149,6 +149,8 @@ following types: paragraph, list item, image, rjs-box, rjs-title
 +=============+==========+=======================================+
 | VALUE       | String   | RevealJS effect                       |
 +-------------+----------+---------------------------------------+
+| class       | String   | CSS classes                           |
++-------------+----------+---------------------------------------+
 | stack       | Flag     | Stack fragments on top of eachother   |
 +-------------+----------+---------------------------------------+
 
@@ -245,6 +247,8 @@ Config values
 | revealjs_style_theme        | RevealJS Theme   | black     | RevealJS theme (builtin or css file)      |
 +-----------------------------+------------------+-----------+-------------------------------------------+
 | revealjs_use_tailwind       | bool             | False     | Use tailwind.css framework                |
++-----------------------------+------------------+-----------+-------------------------------------------+
+| revealjs_purge_tailwind     | bool             | True      | Remove unused classes from tailwind.css   |
 +-----------------------------+------------------+-----------+-------------------------------------------+
 | revealjs_script_files       | List             | []        | Extra JS files to include                 |
 +-----------------------------+------------------+-----------+-------------------------------------------+

@@ -16,7 +16,7 @@ from sphinx_revealit.collectors import RevealjsImageCollector, CSSClassCollector
 from sphinx_revealit.contexts import RevealjsPlugin, RevealjsProjectContext
 from sphinx_revealit.csspurge import CSSPurge
 from sphinx_revealit.nodes import RevealjsNode
-from sphinx_revealit.utils import RjsPygmentsFormatter, static_resource_uri
+from sphinx_revealit.utils import RjsPygmentsFormatter, static_resource_uri, sphinx_gte_4
 from sphinx_revealit.writers import RevealjsSlideTranslator
 
 logger = logging.getLogger(__name__)
@@ -39,7 +39,7 @@ class RevealjsHTMLBuilder(StandaloneHTMLBuilder):
 
         app.add_env_collector(RevealjsImageCollector)
 
-        if self.config.revealjs_use_tailwind:
+        if self.config.revealjs_use_tailwind and self.config.revealjs_purge_tailwind:
             app.add_env_collector(CSSClassCollector)
 
     @property
@@ -97,6 +97,17 @@ class RevealjsHTMLBuilder(StandaloneHTMLBuilder):
         for filename, attrs in self.get_builder_config('js_files', 'html'):
             attrs.setdefault('priority', 800)  # User's JSs are loaded after extensions'
             self.add_js_file(filename, **attrs)
+
+    def _get_style_filename(self) -> str:
+        """Path this method for Sphinx < 4.0.0"""
+        if sphinx_gte_4():
+            return super()._get_style_filename()
+        elif self.config.html_style is not None:
+            return self.config.html_style
+        elif self.theme:
+            return self.theme.get_config('theme', 'stylesheet')
+        else:
+            return 'default.css'
 
     def get_theme_config(self) -> Tuple[str, Dict]:
         """Find and return configuration about theme (name and option params).
@@ -205,11 +216,18 @@ class RevealjsHTMLBuilder(StandaloneHTMLBuilder):
             shutil.copyfile(f, path.join(self.outdir, '_static', path.basename(f)))
 
         if self.config.revealjs_use_tailwind:
-            with progress_message('purging tailwind.css'):
-                whitelist = set()
+            src = files('sphinx_revealit.res').joinpath('tailwind.css')
+            dest = path.join(self.outdir, '_static', 'tailwind.css')
 
-                if hasattr(self.app.env, 'rjs_css_classes'):
-                    whitelist = self.app.env.rjs_css_classes
+            if self.config.revealjs_purge_tailwind:
+                with progress_message('purging tailwind.css'):
+                    whitelist = set()
 
-                purge = CSSPurge.from_file(files('sphinx_revealit.res').joinpath('tailwind.css'))
-                purge.purge_to_file(whitelist, path.join(self.outdir, '_static', 'tailwind.css'))
+                    if hasattr(self.app.env, 'rjs_css_classes'):
+                        whitelist = self.app.env.rjs_css_classes
+
+                    purge = CSSPurge.from_file(src)
+                    purge.purge_to_file(whitelist, dest)
+            else:
+                with progress_message('copying tailwind.css'):
+                    shutil.copyfile(src, dest)
